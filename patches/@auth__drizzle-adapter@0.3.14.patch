@@ -1,0 +1,1341 @@
+diff --git a/index.d.ts b/index.d.ts
+index b59cb82588ed4ab37611495bd6838f964e5dbea6..64ee336a15788d9bcf1051723b8d0d0bc1daebc6 100644
+--- a/index.d.ts
++++ b/index.d.ts
+@@ -66,26 +66,26 @@ import type { Adapter } from "@auth/core/adapters";
+  *  id: text("id").notNull().primaryKey(),
+  *  name: text("name"),
+  *  email: text("email").notNull(),
+- *  emailVerified: timestamp("emailVerified", { mode: "date" }),
++ *  emailVerified: timestamp("email_verified", { mode: "date" }),
+  *  image: text("image"),
+  * })
+  *
+  * export const accounts = pgTable(
+  * "account",
+  * {
+- *   userId: text("userId")
++ *   userId: text("user_id")
+  *     .notNull()
+  *     .references(() => users.id, { onDelete: "cascade" }),
+  *   type: text("type").$type<AdapterAccount["type"]>().notNull(),
+  *   provider: text("provider").notNull(),
+- *   providerAccountId: text("providerAccountId").notNull(),
+- *   refresh_token: text("refresh_token"),
+- *   access_token: text("access_token"),
+- *   expires_at: integer("expires_at"),
+- *   token_type: text("token_type"),
++ *   providerAccountId: text("provider_account_id").notNull(),
++ *   refreshToken: text("refresh_token"),
++ *   accessToken: text("access_token"),
++ *   expiresAt: integer("expires_at"),
++ *   tokenType: text("token_type"),
+  *   scope: text("scope"),
+- *    id_token: text("id_token"),
+- *   session_state: text("session_state"),
++ *    idToken: text("id_token"),
++ *   sessionState: text("session_state"),
+  * },
+  * (account) => ({
+  *   compoundKey: primaryKey({ columns: [account.provider, account.providerAccountId] }),
+@@ -93,15 +93,15 @@ import type { Adapter } from "@auth/core/adapters";
+  * )
+  *
+  * export const sessions = pgTable("session", {
+- *  sessionToken: text("sessionToken").notNull().primaryKey(),
+- *  userId: text("userId")
++ *  sessionToken: text("session_token").notNull().primaryKey(),
++ *  userId: text("user_id")
+  *    .notNull()
+  *    .references(() => users.id, { onDelete: "cascade" }),
+  *  expires: timestamp("expires", { mode: "date" }).notNull(),
+  * })
+  *
+  * export const verificationTokens = pgTable(
+- *  "verificationToken",
++ *  "verification_token",
+  *  {
+  *    identifier: text("identifier").notNull(),
+  *    token: text("token").notNull(),
+@@ -129,26 +129,26 @@ import type { Adapter } from "@auth/core/adapters";
+  *  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  *  name: varchar("name", { length: 255 }),
+  *  email: varchar("email", { length: 255 }).notNull(),
+- *   emailVerified: timestamp("emailVerified", { mode: "date", fsp: 3 }).defaultNow(),
++ *   emailVerified: timestamp("email_verified", { mode: "date", fsp: 3 }).defaultNow(),
+  *  image: varchar("image", { length: 255 }),
+  * })
+  *
+  * export const accounts = mysqlTable(
+  *  "account",
+  *   {
+- *    userId: varchar("userId", { length: 255 })
++ *    userId: varchar("user_id", { length: 255 })
+  *       .notNull()
+  *       .references(() => users.id, { onDelete: "cascade" }),
+  *    type: varchar("type", { length: 255 }).$type<AdapterAccount["type"]>().notNull(),
+  *     provider: varchar("provider", { length: 255 }).notNull(),
+- *    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+- *    refresh_token: varchar("refresh_token", { length: 255 }),
+- *    access_token: varchar("access_token", { length: 255 }),
+- *    expires_at: int("expires_at"),
+- *   token_type: varchar("token_type", { length: 255 }),
++ *    providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
++ *    refreshToken: varchar("refresh_token", { length: 255 }),
++ *    accessToken: varchar("access_token", { length: 255 }),
++ *    expiresAt: int("expires_at"),
++ *   tokenType: varchar("token_type", { length: 255 }),
+  *   scope: varchar("scope", { length: 255 }),
+- *   id_token: varchar("id_token", { length: 2048 }),
+- *   session_state: varchar("session_state", { length: 255 }),
++ *   idToken: varchar("id_token", { length: 2048 }),
++ *   sessionState: varchar("session_state", { length: 255 }),
+  * },
+  * (account) => ({
+  *    compoundKey: primaryKey({
+@@ -158,15 +158,15 @@ import type { Adapter } from "@auth/core/adapters";
+  * )
+  *
+  * export const sessions = mysqlTable("session", {
+- *  sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
+- *  userId: varchar("userId", { length: 255 })
++ *  sessionToken: varchar("session_token", { length: 255 }).notNull().primaryKey(),
++ *  userId: varchar("user_id", { length: 255 })
+  *    .notNull()
+  *    .references(() => users.id, { onDelete: "cascade" }),
+  *  expires: timestamp("expires", { mode: "date" }).notNull(),
+  * })
+  *
+  * export const verificationTokens = mysqlTable(
+- * "verificationToken",
++ * "verification_token",
+  * {
+  *   identifier: varchar("identifier", { length: 255 }).notNull(),
+  *   token: varchar("token", { length: 255 }).notNull(),
+@@ -188,26 +188,26 @@ import type { Adapter } from "@auth/core/adapters";
+  *  id: text("id").notNull().primaryKey(),
+  *  name: text("name"),
+  *  email: text("email").notNull(),
+- *  emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
++ *  emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
+  *  image: text("image"),
+  * })
+  *
+  * export const accounts = sqliteTable(
+  *  "account",
+  *  {
+- *    userId: text("userId")
++ *    userId: text("user_id")
+  *      .notNull()
+  *      .references(() => users.id, { onDelete: "cascade" }),
+  *    type: text("type").$type<AdapterAccount["type"]>().notNull(),
+  *    provider: text("provider").notNull(),
+- *    providerAccountId: text("providerAccountId").notNull(),
+- *    refresh_token: text("refresh_token"),
+- *    access_token: text("access_token"),
+- *    expires_at: integer("expires_at"),
+- *    token_type: text("token_type"),
++ *    providerAccountId: text("provider_account_id").notNull(),
++ *    refreshToken: text("refresh_token"),
++ *    accessToken: text("access_token"),
++ *    expiresAt: integer("expires_at"),
++ *    tokenType: text("token_type"),
+  *    scope: text("scope"),
+- *    id_token: text("id_token"),
+- *    session_state: text("session_state"),
++ *    idToken: text("id_token"),
++ *    sessionState: text("session_state"),
+  *  },
+  *  (account) => ({
+  *    compoundKey: primaryKey({
+@@ -217,15 +217,15 @@ import type { Adapter } from "@auth/core/adapters";
+  * )
+  *
+  * export const sessions = sqliteTable("session", {
+- * sessionToken: text("sessionToken").notNull().primaryKey(),
+- * userId: text("userId")
++ * sessionToken: text("session_token").notNull().primaryKey(),
++ * userId: text("user_id")
+  *   .notNull()
+  *   .references(() => users.id, { onDelete: "cascade" }),
+  * expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+  * })
+  *
+  * export const verificationTokens = sqliteTable(
+- * "verificationToken",
++ * "verification_token",
+  * {
+  *   identifier: text("identifier").notNull(),
+  *   token: text("token").notNull(),
+diff --git a/index.js b/index.js
+index 07a8a9e8c4c349b3e4cf5aff6458f577f92088a4..6962777b79523db57574c215ed47e945e9a28f96 100644
+--- a/index.js
++++ b/index.js
+@@ -71,26 +71,26 @@ import { is } from "drizzle-orm";
+  *  id: text("id").notNull().primaryKey(),
+  *  name: text("name"),
+  *  email: text("email").notNull(),
+- *  emailVerified: timestamp("emailVerified", { mode: "date" }),
++ *  emailVerified: timestamp("email_verified", { mode: "date" }),
+  *  image: text("image"),
+  * })
+  *
+  * export const accounts = pgTable(
+  * "account",
+  * {
+- *   userId: text("userId")
++ *   userId: text("user_id")
+  *     .notNull()
+  *     .references(() => users.id, { onDelete: "cascade" }),
+  *   type: text("type").$type<AdapterAccount["type"]>().notNull(),
+  *   provider: text("provider").notNull(),
+- *   providerAccountId: text("providerAccountId").notNull(),
+- *   refresh_token: text("refresh_token"),
+- *   access_token: text("access_token"),
+- *   expires_at: integer("expires_at"),
+- *   token_type: text("token_type"),
++ *   providerAccountId: text("provider_account_id").notNull(),
++ *   refreshToken: text("refresh_token"),
++ *   accessToken: text("access_token"),
++ *   expiresAt: integer("expires_at"),
++ *   tokenType: text("token_type"),
+  *   scope: text("scope"),
+- *    id_token: text("id_token"),
+- *   session_state: text("session_state"),
++ *    idToken: text("id_token"),
++ *   sessionState: text("session_state"),
+  * },
+  * (account) => ({
+  *   compoundKey: primaryKey({ columns: [account.provider, account.providerAccountId] }),
+@@ -98,15 +98,15 @@ import { is } from "drizzle-orm";
+  * )
+  *
+  * export const sessions = pgTable("session", {
+- *  sessionToken: text("sessionToken").notNull().primaryKey(),
+- *  userId: text("userId")
++ *  sessionToken: text("session_token").notNull().primaryKey(),
++ *  userId: text("user_id")
+  *    .notNull()
+  *    .references(() => users.id, { onDelete: "cascade" }),
+  *  expires: timestamp("expires", { mode: "date" }).notNull(),
+  * })
+  *
+  * export const verificationTokens = pgTable(
+- *  "verificationToken",
++ *  "verification_token",
+  *  {
+  *    identifier: text("identifier").notNull(),
+  *    token: text("token").notNull(),
+@@ -134,26 +134,26 @@ import { is } from "drizzle-orm";
+  *  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  *  name: varchar("name", { length: 255 }),
+  *  email: varchar("email", { length: 255 }).notNull(),
+- *   emailVerified: timestamp("emailVerified", { mode: "date", fsp: 3 }).defaultNow(),
++ *   emailVerified: timestamp("email_verified", { mode: "date", fsp: 3 }).defaultNow(),
+  *  image: varchar("image", { length: 255 }),
+  * })
+  *
+  * export const accounts = mysqlTable(
+  *  "account",
+  *   {
+- *    userId: varchar("userId", { length: 255 })
++ *    userId: varchar("user_id", { length: 255 })
+  *       .notNull()
+  *       .references(() => users.id, { onDelete: "cascade" }),
+  *    type: varchar("type", { length: 255 }).$type<AdapterAccount["type"]>().notNull(),
+  *     provider: varchar("provider", { length: 255 }).notNull(),
+- *    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+- *    refresh_token: varchar("refresh_token", { length: 255 }),
+- *    access_token: varchar("access_token", { length: 255 }),
+- *    expires_at: int("expires_at"),
+- *   token_type: varchar("token_type", { length: 255 }),
++ *    providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
++ *    refreshToken: varchar("refresh_token", { length: 255 }),
++ *    accessToken: varchar("access_token", { length: 255 }),
++ *    expiresAt: int("expires_at"),
++ *   tokenType: varchar("token_type", { length: 255 }),
+  *   scope: varchar("scope", { length: 255 }),
+- *   id_token: varchar("id_token", { length: 2048 }),
+- *   session_state: varchar("session_state", { length: 255 }),
++ *   idToken: varchar("id_token", { length: 2048 }),
++ *   sessionState: varchar("session_state", { length: 255 }),
+  * },
+  * (account) => ({
+  *    compoundKey: primaryKey({
+@@ -163,15 +163,15 @@ import { is } from "drizzle-orm";
+  * )
+  *
+  * export const sessions = mysqlTable("session", {
+- *  sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
+- *  userId: varchar("userId", { length: 255 })
++ *  sessionToken: varchar("session_token", { length: 255 }).notNull().primaryKey(),
++ *  userId: varchar("user_id", { length: 255 })
+  *    .notNull()
+  *    .references(() => users.id, { onDelete: "cascade" }),
+  *  expires: timestamp("expires", { mode: "date" }).notNull(),
+  * })
+  *
+  * export const verificationTokens = mysqlTable(
+- * "verificationToken",
++ * "verification_token",
+  * {
+  *   identifier: varchar("identifier", { length: 255 }).notNull(),
+  *   token: varchar("token", { length: 255 }).notNull(),
+@@ -193,26 +193,26 @@ import { is } from "drizzle-orm";
+  *  id: text("id").notNull().primaryKey(),
+  *  name: text("name"),
+  *  email: text("email").notNull(),
+- *  emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
++ *  emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
+  *  image: text("image"),
+  * })
+  *
+  * export const accounts = sqliteTable(
+  *  "account",
+  *  {
+- *    userId: text("userId")
++ *    userId: text("user_id")
+  *      .notNull()
+  *      .references(() => users.id, { onDelete: "cascade" }),
+  *    type: text("type").$type<AdapterAccount["type"]>().notNull(),
+  *    provider: text("provider").notNull(),
+- *    providerAccountId: text("providerAccountId").notNull(),
+- *    refresh_token: text("refresh_token"),
+- *    access_token: text("access_token"),
+- *    expires_at: integer("expires_at"),
+- *    token_type: text("token_type"),
++ *    providerAccountId: text("provider_account_id").notNull(),
++ *    refreshToken: text("refresh_token"),
++ *    accessToken: text("access_token"),
++ *    expiresAt: integer("expires_at"),
++ *    tokenType: text("token_type"),
+  *    scope: text("scope"),
+- *    id_token: text("id_token"),
+- *    session_state: text("session_state"),
++ *    idToken: text("id_token"),
++ *    sessionState: text("session_state"),
+  *  },
+  *  (account) => ({
+  *    compoundKey: primaryKey({
+@@ -222,15 +222,15 @@ import { is } from "drizzle-orm";
+  * )
+  *
+  * export const sessions = sqliteTable("session", {
+- * sessionToken: text("sessionToken").notNull().primaryKey(),
+- * userId: text("userId")
++ * sessionToken: text("session_token").notNull().primaryKey(),
++ * userId: text("user_id")
+  *   .notNull()
+  *   .references(() => users.id, { onDelete: "cascade" }),
+  * expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+  * })
+  *
+  * export const verificationTokens = sqliteTable(
+- * "verificationToken",
++ * "verification_token",
+  * {
+  *   identifier: text("identifier").notNull(),
+  *   token: text("token").notNull(),
+diff --git a/lib/mysql.d.ts b/lib/mysql.d.ts
+index 9ea4b2e2ed642faf5133583f19c633cb0682eb70..b634950a22a4e35f7dd35e9d326637b02484fbe3 100644
+--- a/lib/mysql.d.ts
++++ b/lib/mysql.d.ts
+@@ -42,7 +42,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+                 baseColumn: never;
+             }, object>;
+             emailVerified: import("drizzle-orm/mysql-core").MySqlColumn<{
+-                name: "emailVerified";
++                name: "email_verified";
+                 tableName: "user";
+                 dataType: "date";
+                 columnType: "MySqlTimestamp";
+@@ -73,7 +73,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+         schema: undefined;
+         columns: {
+             userId: import("drizzle-orm/mysql-core").MySqlColumn<{
+-                name: "userId";
++                name: "user_id";
+                 tableName: "account";
+                 dataType: "string";
+                 columnType: "MySqlVarChar";
+@@ -109,7 +109,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+                 baseColumn: never;
+             }, object>;
+             providerAccountId: import("drizzle-orm/mysql-core").MySqlColumn<{
+-                name: "providerAccountId";
++                name: "provider_account_id";
+                 tableName: "account";
+                 dataType: "string";
+                 columnType: "MySqlVarChar";
+@@ -120,7 +120,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            refresh_token: import("drizzle-orm/mysql-core").MySqlColumn<{
++            refreshToken: import("drizzle-orm/mysql-core").MySqlColumn<{
+                 name: "refresh_token";
+                 tableName: "account";
+                 dataType: "string";
+@@ -132,7 +132,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            access_token: import("drizzle-orm/mysql-core").MySqlColumn<{
++            accessToken: import("drizzle-orm/mysql-core").MySqlColumn<{
+                 name: "access_token";
+                 tableName: "account";
+                 dataType: "string";
+@@ -144,7 +144,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            expires_at: import("drizzle-orm/mysql-core").MySqlColumn<{
++            expiresAt: import("drizzle-orm/mysql-core").MySqlColumn<{
+                 name: "expires_at";
+                 tableName: "account";
+                 dataType: "number";
+@@ -156,7 +156,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+                 enumValues: undefined;
+                 baseColumn: never;
+             }, object>;
+-            token_type: import("drizzle-orm/mysql-core").MySqlColumn<{
++            tokenType: import("drizzle-orm/mysql-core").MySqlColumn<{
+                 name: "token_type";
+                 tableName: "account";
+                 dataType: "string";
+@@ -180,7 +180,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            id_token: import("drizzle-orm/mysql-core").MySqlColumn<{
++            idToken: import("drizzle-orm/mysql-core").MySqlColumn<{
+                 name: "id_token";
+                 tableName: "account";
+                 dataType: "string";
+@@ -192,7 +192,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            session_state: import("drizzle-orm/mysql-core").MySqlColumn<{
++            sessionState: import("drizzle-orm/mysql-core").MySqlColumn<{
+                 name: "session_state";
+                 tableName: "account";
+                 dataType: "string";
+@@ -212,7 +212,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+         schema: undefined;
+         columns: {
+             sessionToken: import("drizzle-orm/mysql-core").MySqlColumn<{
+-                name: "sessionToken";
++                name: "session_token";
+                 tableName: "session";
+                 dataType: "string";
+                 columnType: "MySqlVarChar";
+@@ -224,7 +224,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+                 baseColumn: never;
+             }, object>;
+             userId: import("drizzle-orm/mysql-core").MySqlColumn<{
+-                name: "userId";
++                name: "user_id";
+                 tableName: "session";
+                 dataType: "string";
+                 columnType: "MySqlVarChar";
+@@ -251,12 +251,12 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+         dialect: "mysql";
+     }>;
+     verificationTokens: import("drizzle-orm/mysql-core").MySqlTableWithColumns<{
+-        name: "verificationToken";
++        name: "verification_token";
+         schema: undefined;
+         columns: {
+             identifier: import("drizzle-orm/mysql-core").MySqlColumn<{
+                 name: "identifier";
+-                tableName: "verificationToken";
++                tableName: "verification_token";
+                 dataType: "string";
+                 columnType: "MySqlVarChar";
+                 data: string;
+@@ -268,7 +268,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+             }, object>;
+             token: import("drizzle-orm/mysql-core").MySqlColumn<{
+                 name: "token";
+-                tableName: "verificationToken";
++                tableName: "verification_token";
+                 dataType: "string";
+                 columnType: "MySqlVarChar";
+                 data: string;
+@@ -280,7 +280,7 @@ export declare function createTables(mySqlTable: MySqlTableFn): {
+             }, object>;
+             expires: import("drizzle-orm/mysql-core").MySqlColumn<{
+                 name: "expires";
+-                tableName: "verificationToken";
++                tableName: "verification_token";
+                 dataType: "date";
+                 columnType: "MySqlTimestamp";
+                 data: Date;
+diff --git a/lib/mysql.js b/lib/mysql.js
+index 01d0102e6fdf7454e7b71ef85e82098da0a17a50..35dc481cc8d2f5d7c63a4660f20d098875a09b68 100644
+--- a/lib/mysql.js
++++ b/lib/mysql.js
+@@ -5,43 +5,43 @@ export function createTables(mySqlTable) {
+         id: varchar("id", { length: 255 }).notNull().primaryKey(),
+         name: varchar("name", { length: 255 }),
+         email: varchar("email", { length: 255 }).notNull(),
+-        emailVerified: timestamp("emailVerified", {
++        emailVerified: timestamp("email_verified", {
+             mode: "date",
+             fsp: 3,
+         }).defaultNow(),
+         image: varchar("image", { length: 255 }),
+     });
+     const accounts = mySqlTable("account", {
+-        userId: varchar("userId", { length: 255 })
++        userId: varchar("user_id", { length: 255 })
+             .notNull()
+             .references(() => users.id, { onDelete: "cascade" }),
+         type: varchar("type", { length: 255 })
+             .$type()
+             .notNull(),
+         provider: varchar("provider", { length: 255 }).notNull(),
+-        providerAccountId: varchar("providerAccountId", {
++        providerAccountId: varchar("provider_account_id", {
+             length: 255,
+         }).notNull(),
+-        refresh_token: varchar("refresh_token", { length: 255 }),
+-        access_token: varchar("access_token", { length: 255 }),
+-        expires_at: int("expires_at"),
+-        token_type: varchar("token_type", { length: 255 }),
++        refreshToken: varchar("refresh_token", { length: 255 }),
++        accessToken: varchar("access_token", { length: 255 }),
++        expiresAt: int("expires_at"),
++        tokenType: varchar("token_type", { length: 255 }),
+         scope: varchar("scope", { length: 255 }),
+-        id_token: varchar("id_token", { length: 255 }),
+-        session_state: varchar("session_state", { length: 255 }),
++        idToken: varchar("id_token", { length: 255 }),
++        sessionState: varchar("session_state", { length: 255 }),
+     }, (account) => ({
+         compoundKey: primaryKey(account.provider, account.providerAccountId),
+     }));
+     const sessions = mySqlTable("session", {
+-        sessionToken: varchar("sessionToken", { length: 255 })
++        sessionToken: varchar("session_token", { length: 255 })
+             .notNull()
+             .primaryKey(),
+-        userId: varchar("userId", { length: 255 })
++        userId: varchar("user_id", { length: 255 })
+             .notNull()
+             .references(() => users.id, { onDelete: "cascade" }),
+         expires: timestamp("expires", { mode: "date" }).notNull(),
+     });
+-    const verificationTokens = mySqlTable("verificationToken", {
++    const verificationTokens = mySqlTable("verification_token", {
+         identifier: varchar("identifier", { length: 255 }).notNull(),
+         token: varchar("token", { length: 255 }).notNull(),
+         expires: timestamp("expires", { mode: "date" }).notNull(),
+diff --git a/lib/pg.d.ts b/lib/pg.d.ts
+index 1d434a02c43b7f6448be9da3af95b2828c578848..239afa084140b77082eae0a46dd2bd3aac9e7bfa 100644
+--- a/lib/pg.d.ts
++++ b/lib/pg.d.ts
+@@ -42,7 +42,7 @@ export declare function createTables(pgTable: PgTableFn): {
+                 baseColumn: never;
+             }, {}, {}>;
+             emailVerified: import("drizzle-orm/pg-core").PgColumn<{
+-                name: "emailVerified";
++                name: "email_verified";
+                 tableName: "user";
+                 dataType: "date";
+                 columnType: "PgTimestamp";
+@@ -73,7 +73,7 @@ export declare function createTables(pgTable: PgTableFn): {
+         schema: undefined;
+         columns: {
+             userId: import("drizzle-orm/pg-core").PgColumn<{
+-                name: "userId";
++                name: "user_id";
+                 tableName: "account";
+                 dataType: "string";
+                 columnType: "PgText";
+@@ -109,7 +109,7 @@ export declare function createTables(pgTable: PgTableFn): {
+                 baseColumn: never;
+             }, {}, {}>;
+             providerAccountId: import("drizzle-orm/pg-core").PgColumn<{
+-                name: "providerAccountId";
++                name: "provider_account_id";
+                 tableName: "account";
+                 dataType: "string";
+                 columnType: "PgText";
+@@ -120,7 +120,7 @@ export declare function createTables(pgTable: PgTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, {}, {}>;
+-            refresh_token: import("drizzle-orm/pg-core").PgColumn<{
++            refreshToken: import("drizzle-orm/pg-core").PgColumn<{
+                 name: "refresh_token";
+                 tableName: "account";
+                 dataType: "string";
+@@ -132,7 +132,7 @@ export declare function createTables(pgTable: PgTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, {}, {}>;
+-            access_token: import("drizzle-orm/pg-core").PgColumn<{
++            accessToken: import("drizzle-orm/pg-core").PgColumn<{
+                 name: "access_token";
+                 tableName: "account";
+                 dataType: "string";
+@@ -144,7 +144,7 @@ export declare function createTables(pgTable: PgTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, {}, {}>;
+-            expires_at: import("drizzle-orm/pg-core").PgColumn<{
++            expiresAt: import("drizzle-orm/pg-core").PgColumn<{
+                 name: "expires_at";
+                 tableName: "account";
+                 dataType: "number";
+@@ -156,7 +156,7 @@ export declare function createTables(pgTable: PgTableFn): {
+                 enumValues: undefined;
+                 baseColumn: never;
+             }, {}, {}>;
+-            token_type: import("drizzle-orm/pg-core").PgColumn<{
++            tokenType: import("drizzle-orm/pg-core").PgColumn<{
+                 name: "token_type";
+                 tableName: "account";
+                 dataType: "string";
+@@ -180,7 +180,7 @@ export declare function createTables(pgTable: PgTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, {}, {}>;
+-            id_token: import("drizzle-orm/pg-core").PgColumn<{
++            idToken: import("drizzle-orm/pg-core").PgColumn<{
+                 name: "id_token";
+                 tableName: "account";
+                 dataType: "string";
+@@ -192,7 +192,7 @@ export declare function createTables(pgTable: PgTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, {}, {}>;
+-            session_state: import("drizzle-orm/pg-core").PgColumn<{
++            sessionState: import("drizzle-orm/pg-core").PgColumn<{
+                 name: "session_state";
+                 tableName: "account";
+                 dataType: "string";
+@@ -212,7 +212,7 @@ export declare function createTables(pgTable: PgTableFn): {
+         schema: undefined;
+         columns: {
+             sessionToken: import("drizzle-orm/pg-core").PgColumn<{
+-                name: "sessionToken";
++                name: "session_token";
+                 tableName: "session";
+                 dataType: "string";
+                 columnType: "PgText";
+@@ -224,7 +224,7 @@ export declare function createTables(pgTable: PgTableFn): {
+                 baseColumn: never;
+             }, {}, {}>;
+             userId: import("drizzle-orm/pg-core").PgColumn<{
+-                name: "userId";
++                name: "user_id";
+                 tableName: "session";
+                 dataType: "string";
+                 columnType: "PgText";
+@@ -251,12 +251,12 @@ export declare function createTables(pgTable: PgTableFn): {
+         dialect: "pg";
+     }>;
+     verificationTokens: import("drizzle-orm/pg-core").PgTableWithColumns<{
+-        name: "verificationToken";
++        name: "verification_token";
+         schema: undefined;
+         columns: {
+             identifier: import("drizzle-orm/pg-core").PgColumn<{
+                 name: "identifier";
+-                tableName: "verificationToken";
++                tableName: "verification_token";
+                 dataType: "string";
+                 columnType: "PgText";
+                 data: string;
+@@ -268,7 +268,7 @@ export declare function createTables(pgTable: PgTableFn): {
+             }, {}, {}>;
+             token: import("drizzle-orm/pg-core").PgColumn<{
+                 name: "token";
+-                tableName: "verificationToken";
++                tableName: "verification_token";
+                 dataType: "string";
+                 columnType: "PgText";
+                 data: string;
+@@ -280,7 +280,7 @@ export declare function createTables(pgTable: PgTableFn): {
+             }, {}, {}>;
+             expires: import("drizzle-orm/pg-core").PgColumn<{
+                 name: "expires";
+-                tableName: "verificationToken";
++                tableName: "verification_token";
+                 dataType: "date";
+                 columnType: "PgTimestamp";
+                 data: Date;
+diff --git a/lib/pg.js b/lib/pg.js
+index f3d333f0ba5ab12c807f507b7b52925a0489b136..62bcce6c595a8b60054d358817db24aa5f67d4c9 100644
+--- a/lib/pg.js
++++ b/lib/pg.js
+@@ -5,34 +5,34 @@ export function createTables(pgTable) {
+         id: text("id").notNull().primaryKey(),
+         name: text("name"),
+         email: text("email").notNull(),
+-        emailVerified: timestamp("emailVerified", { mode: "date" }),
++        emailVerified: timestamp("email_verified", { mode: "date" }),
+         image: text("image"),
+     });
+     const accounts = pgTable("account", {
+-        userId: text("userId")
++        userId: text("user_id")
+             .notNull()
+             .references(() => users.id, { onDelete: "cascade" }),
+         type: text("type").$type().notNull(),
+         provider: text("provider").notNull(),
+-        providerAccountId: text("providerAccountId").notNull(),
+-        refresh_token: text("refresh_token"),
+-        access_token: text("access_token"),
+-        expires_at: integer("expires_at"),
+-        token_type: text("token_type"),
++        providerAccountId: text("provider_account_id").notNull(),
++        refreshToken: text("refresh_token"),
++        accessToken: text("access_token"),
++        expiresAt: integer("expires_at"),
++        tokenType: text("token_type"),
+         scope: text("scope"),
+-        id_token: text("id_token"),
+-        session_state: text("session_state"),
++        idToken: text("id_token"),
++        sessionState: text("session_state"),
+     }, (account) => ({
+         compoundKey: primaryKey(account.provider, account.providerAccountId),
+     }));
+     const sessions = pgTable("session", {
+-        sessionToken: text("sessionToken").notNull().primaryKey(),
+-        userId: text("userId")
++        sessionToken: text("session_token").notNull().primaryKey(),
++        userId: text("user_id")
+             .notNull()
+             .references(() => users.id, { onDelete: "cascade" }),
+         expires: timestamp("expires", { mode: "date" }).notNull(),
+     });
+-    const verificationTokens = pgTable("verificationToken", {
++    const verificationTokens = pgTable("verification_token", {
+         identifier: text("identifier").notNull(),
+         token: text("token").notNull(),
+         expires: timestamp("expires", { mode: "date" }).notNull(),
+@@ -112,13 +112,13 @@ export function pgDrizzleAdapter(client, tableFn = defaultPgTableFn) {
+             // However, the return type is expecting `undefined`.
+             const account = {
+                 ...updatedAccount,
+-                access_token: updatedAccount.access_token ?? undefined,
+-                token_type: updatedAccount.token_type ?? undefined,
+-                id_token: updatedAccount.id_token ?? undefined,
+-                refresh_token: updatedAccount.refresh_token ?? undefined,
++                accessToken: updatedAccount.access_token ?? undefined,
++                tokenType: updatedAccount.token_type ?? undefined,
++                idToken: updatedAccount.id_token ?? undefined,
++                refreshToken: updatedAccount.refresh_token ?? undefined,
+                 scope: updatedAccount.scope ?? undefined,
+-                expires_at: updatedAccount.expires_at ?? undefined,
+-                session_state: updatedAccount.session_state ?? undefined,
++                expiresAt: updatedAccount.expires_at ?? undefined,
++                sessionState: updatedAccount.session_state ?? undefined,
+             };
+             return account;
+         },
+diff --git a/lib/sqlite.d.ts b/lib/sqlite.d.ts
+index 6ea488620749b75d6e01efc2f3f050994f859a87..475fb45dd8ee38c3f2a8bf78a2a3f89edde305bf 100644
+--- a/lib/sqlite.d.ts
++++ b/lib/sqlite.d.ts
+@@ -42,7 +42,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+                 baseColumn: never;
+             }, object>;
+             emailVerified: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+-                name: "emailVerified";
++                name: "email_verified";
+                 tableName: "user";
+                 dataType: "date";
+                 columnType: "SQLiteTimestamp";
+@@ -73,7 +73,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+         schema: undefined;
+         columns: {
+             userId: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+-                name: "userId";
++                name: "user_id";
+                 tableName: "account";
+                 dataType: "string";
+                 columnType: "SQLiteText";
+@@ -109,7 +109,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+                 baseColumn: never;
+             }, object>;
+             providerAccountId: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+-                name: "providerAccountId";
++                name: "provider_account_id";
+                 tableName: "account";
+                 dataType: "string";
+                 columnType: "SQLiteText";
+@@ -120,7 +120,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            refresh_token: import("drizzle-orm/sqlite-core").SQLiteColumn<{
++            refreshToken: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+                 name: "refresh_token";
+                 tableName: "account";
+                 dataType: "string";
+@@ -132,7 +132,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            access_token: import("drizzle-orm/sqlite-core").SQLiteColumn<{
++            accessToken: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+                 name: "access_token";
+                 tableName: "account";
+                 dataType: "string";
+@@ -144,7 +144,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            expires_at: import("drizzle-orm/sqlite-core").SQLiteColumn<{
++            expiresAt: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+                 name: "expires_at";
+                 tableName: "account";
+                 dataType: "number";
+@@ -156,7 +156,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+                 enumValues: undefined;
+                 baseColumn: never;
+             }, object>;
+-            token_type: import("drizzle-orm/sqlite-core").SQLiteColumn<{
++            tokenType: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+                 name: "token_type";
+                 tableName: "account";
+                 dataType: "string";
+@@ -180,7 +180,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            id_token: import("drizzle-orm/sqlite-core").SQLiteColumn<{
++            idToken: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+                 name: "id_token";
+                 tableName: "account";
+                 dataType: "string";
+@@ -192,7 +192,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+                 enumValues: [string, ...string[]];
+                 baseColumn: never;
+             }, object>;
+-            session_state: import("drizzle-orm/sqlite-core").SQLiteColumn<{
++            sessionState: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+                 name: "session_state";
+                 tableName: "account";
+                 dataType: "string";
+@@ -212,7 +212,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+         schema: undefined;
+         columns: {
+             sessionToken: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+-                name: "sessionToken";
++                name: "session_token";
+                 tableName: "session";
+                 dataType: "string";
+                 columnType: "SQLiteText";
+@@ -224,7 +224,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+                 baseColumn: never;
+             }, object>;
+             userId: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+-                name: "userId";
++                name: "user_id";
+                 tableName: "session";
+                 dataType: "string";
+                 columnType: "SQLiteText";
+@@ -251,12 +251,12 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+         dialect: "sqlite";
+     }>;
+     verificationTokens: import("drizzle-orm/sqlite-core").SQLiteTableWithColumns<{
+-        name: "verificationToken";
++        name: "verification_token";
+         schema: undefined;
+         columns: {
+             identifier: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+                 name: "identifier";
+-                tableName: "verificationToken";
++                tableName: "verification_token";
+                 dataType: "string";
+                 columnType: "SQLiteText";
+                 data: string;
+@@ -268,7 +268,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+             }, object>;
+             token: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+                 name: "token";
+-                tableName: "verificationToken";
++                tableName: "verification_token";
+                 dataType: "string";
+                 columnType: "SQLiteText";
+                 data: string;
+@@ -280,7 +280,7 @@ export declare function createTables(sqliteTable: SQLiteTableFn): {
+             }, object>;
+             expires: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+                 name: "expires";
+-                tableName: "verificationToken";
++                tableName: "verification_token";
+                 dataType: "date";
+                 columnType: "SQLiteTimestamp";
+                 data: Date;
+diff --git a/lib/sqlite.js b/lib/sqlite.js
+index fd700da196624314d66c0107de6328e37efba219..fc63771932a4f7b64aaf51d3410c103ef2ed5f93 100644
+--- a/lib/sqlite.js
++++ b/lib/sqlite.js
+@@ -5,34 +5,34 @@ export function createTables(sqliteTable) {
+         id: text("id").notNull().primaryKey(),
+         name: text("name"),
+         email: text("email").notNull(),
+-        emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
++        emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
+         image: text("image"),
+     });
+     const accounts = sqliteTable("account", {
+-        userId: text("userId")
++        userId: text("user_id")
+             .notNull()
+             .references(() => users.id, { onDelete: "cascade" }),
+         type: text("type").$type().notNull(),
+         provider: text("provider").notNull(),
+-        providerAccountId: text("providerAccountId").notNull(),
+-        refresh_token: text("refresh_token"),
+-        access_token: text("access_token"),
+-        expires_at: integer("expires_at"),
+-        token_type: text("token_type"),
++        providerAccountId: text("provider_account_id").notNull(),
++        refreshToken: text("refresh_token"),
++        accessToken: text("access_token"),
++        expiresAt: integer("expires_at"),
++        tokenType: text("token_type"),
+         scope: text("scope"),
+-        id_token: text("id_token"),
+-        session_state: text("session_state"),
++        idToken: text("id_token"),
++        sessionState: text("session_state"),
+     }, (account) => ({
+         compoundKey: primaryKey(account.provider, account.providerAccountId),
+     }));
+     const sessions = sqliteTable("session", {
+-        sessionToken: text("sessionToken").notNull().primaryKey(),
+-        userId: text("userId")
++        sessionToken: text("session_token").notNull().primaryKey(),
++        userId: text("user_id")
+             .notNull()
+             .references(() => users.id, { onDelete: "cascade" }),
+         expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+     });
+-    const verificationTokens = sqliteTable("verificationToken", {
++    const verificationTokens = sqliteTable("verification_token", {
+         identifier: text("identifier").notNull(),
+         token: text("token").notNull(),
+         expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+@@ -109,13 +109,13 @@ export function SQLiteDrizzleAdapter(client, tableFn = defaultSqliteTableFn) {
+             const account = {
+                 ...updatedAccount,
+                 type: updatedAccount.type,
+-                access_token: updatedAccount.access_token ?? undefined,
+-                token_type: updatedAccount.token_type ?? undefined,
+-                id_token: updatedAccount.id_token ?? undefined,
+-                refresh_token: updatedAccount.refresh_token ?? undefined,
++                accessToken: updatedAccount.access_token ?? undefined,
++                tokenType: updatedAccount.token_type ?? undefined,
++                idToken: updatedAccount.id_token ?? undefined,
++                refreshToken: updatedAccount.refresh_token ?? undefined,
+                 scope: updatedAccount.scope ?? undefined,
+-                expires_at: updatedAccount.expires_at ?? undefined,
+-                session_state: updatedAccount.session_state ?? undefined,
++                expiresAt: updatedAccount.expires_at ?? undefined,
++                sessionState: updatedAccount.session_state ?? undefined,
+             };
+             return account;
+         },
+diff --git a/src/index.ts b/src/index.ts
+index d4b566cfd464890eb5a2a8b9a56a0ea8528f93c4..0addfc6e77118a714bf047589515efeb4c86d088 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -76,26 +76,26 @@ import type { Adapter } from "@auth/core/adapters"
+  *  id: text("id").notNull().primaryKey(),
+  *  name: text("name"),
+  *  email: text("email").notNull(),
+- *  emailVerified: timestamp("emailVerified", { mode: "date" }),
++ *  emailVerified: timestamp("email_verified", { mode: "date" }),
+  *  image: text("image"),
+  * })
+  *
+  * export const accounts = pgTable(
+  * "account",
+  * {
+- *   userId: text("userId")
++ *   userId: text("user_id")
+  *     .notNull()
+  *     .references(() => users.id, { onDelete: "cascade" }),
+  *   type: text("type").$type<AdapterAccount["type"]>().notNull(),
+  *   provider: text("provider").notNull(),
+- *   providerAccountId: text("providerAccountId").notNull(),
+- *   refresh_token: text("refresh_token"),
+- *   access_token: text("access_token"),
+- *   expires_at: integer("expires_at"),
+- *   token_type: text("token_type"),
++ *   providerAccountId: text("provider_account_id").notNull(),
++ *   refreshToken: text("refresh_token"),
++ *   accessToken: text("access_token"),
++ *   expiresAt: integer("expires_at"),
++ *   tokenType: text("token_type"),
+  *   scope: text("scope"),
+- *    id_token: text("id_token"),
+- *   session_state: text("session_state"),
++ *    idToken: text("id_token"),
++ *   sessionState: text("session_state"),
+  * },
+  * (account) => ({
+  *   compoundKey: primaryKey({ columns: [account.provider, account.providerAccountId] }),
+@@ -103,15 +103,15 @@ import type { Adapter } from "@auth/core/adapters"
+  * )
+  *
+  * export const sessions = pgTable("session", {
+- *  sessionToken: text("sessionToken").notNull().primaryKey(),
+- *  userId: text("userId")
++ *  sessionToken: text("session_token").notNull().primaryKey(),
++ *  userId: text("user_id")
+  *    .notNull()
+  *    .references(() => users.id, { onDelete: "cascade" }),
+  *  expires: timestamp("expires", { mode: "date" }).notNull(),
+  * })
+  *
+  * export const verificationTokens = pgTable(
+- *  "verificationToken",
++ *  "verification_token",
+  *  {
+  *    identifier: text("identifier").notNull(),
+  *    token: text("token").notNull(),
+@@ -139,26 +139,26 @@ import type { Adapter } from "@auth/core/adapters"
+  *  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  *  name: varchar("name", { length: 255 }),
+  *  email: varchar("email", { length: 255 }).notNull(),
+- *   emailVerified: timestamp("emailVerified", { mode: "date", fsp: 3 }).defaultNow(),
++ *   emailVerified: timestamp("email_verified", { mode: "date", fsp: 3 }).defaultNow(),
+  *  image: varchar("image", { length: 255 }),
+  * })
+  *
+  * export const accounts = mysqlTable(
+  *  "account",
+  *   {
+- *    userId: varchar("userId", { length: 255 })
++ *    userId: varchar("user_id", { length: 255 })
+  *       .notNull()
+  *       .references(() => users.id, { onDelete: "cascade" }),
+  *    type: varchar("type", { length: 255 }).$type<AdapterAccount["type"]>().notNull(),
+  *     provider: varchar("provider", { length: 255 }).notNull(),
+- *    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+- *    refresh_token: varchar("refresh_token", { length: 255 }),
+- *    access_token: varchar("access_token", { length: 255 }),
+- *    expires_at: int("expires_at"),
+- *   token_type: varchar("token_type", { length: 255 }),
++ *    providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
++ *    refreshToken: varchar("refresh_token", { length: 255 }),
++ *    accessToken: varchar("access_token", { length: 255 }),
++ *    expiresAt: int("expires_at"),
++ *   tokenType: varchar("token_type", { length: 255 }),
+  *   scope: varchar("scope", { length: 255 }),
+- *   id_token: varchar("id_token", { length: 2048 }),
+- *   session_state: varchar("session_state", { length: 255 }),
++ *   idToken: varchar("id_token", { length: 2048 }),
++ *   sessionState: varchar("session_state", { length: 255 }),
+  * },
+  * (account) => ({
+  *    compoundKey: primaryKey({
+@@ -168,15 +168,15 @@ import type { Adapter } from "@auth/core/adapters"
+  * )
+  *
+  * export const sessions = mysqlTable("session", {
+- *  sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
+- *  userId: varchar("userId", { length: 255 })
++ *  sessionToken: varchar("session_token", { length: 255 }).notNull().primaryKey(),
++ *  userId: varchar("user_id", { length: 255 })
+  *    .notNull()
+  *    .references(() => users.id, { onDelete: "cascade" }),
+  *  expires: timestamp("expires", { mode: "date" }).notNull(),
+  * })
+  *
+  * export const verificationTokens = mysqlTable(
+- * "verificationToken",
++ * "verification_token",
+  * {
+  *   identifier: varchar("identifier", { length: 255 }).notNull(),
+  *   token: varchar("token", { length: 255 }).notNull(),
+@@ -198,26 +198,26 @@ import type { Adapter } from "@auth/core/adapters"
+  *  id: text("id").notNull().primaryKey(),
+  *  name: text("name"),
+  *  email: text("email").notNull(),
+- *  emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
++ *  emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
+  *  image: text("image"),
+  * })
+  *
+  * export const accounts = sqliteTable(
+  *  "account",
+  *  {
+- *    userId: text("userId")
++ *    userId: text("user_id")
+  *      .notNull()
+  *      .references(() => users.id, { onDelete: "cascade" }),
+  *    type: text("type").$type<AdapterAccount["type"]>().notNull(),
+  *    provider: text("provider").notNull(),
+- *    providerAccountId: text("providerAccountId").notNull(),
+- *    refresh_token: text("refresh_token"),
+- *    access_token: text("access_token"),
+- *    expires_at: integer("expires_at"),
+- *    token_type: text("token_type"),
++ *    providerAccountId: text("provider_account_id").notNull(),
++ *    refreshToken: text("refresh_token"),
++ *    accessToken: text("access_token"),
++ *    expiresAt: integer("expires_at"),
++ *    tokenType: text("token_type"),
+  *    scope: text("scope"),
+- *    id_token: text("id_token"),
+- *    session_state: text("session_state"),
++ *    idToken: text("id_token"),
++ *    sessionState: text("session_state"),
+  *  },
+  *  (account) => ({
+  *    compoundKey: primaryKey({
+@@ -227,15 +227,15 @@ import type { Adapter } from "@auth/core/adapters"
+  * )
+  *
+  * export const sessions = sqliteTable("session", {
+- * sessionToken: text("sessionToken").notNull().primaryKey(),
+- * userId: text("userId")
++ * sessionToken: text("session_token").notNull().primaryKey(),
++ * userId: text("user_id")
+  *   .notNull()
+  *   .references(() => users.id, { onDelete: "cascade" }),
+  * expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+  * })
+  *
+  * export const verificationTokens = sqliteTable(
+- * "verificationToken",
++ * "verification_token",
+  * {
+  *   identifier: text("identifier").notNull(),
+  *   token: text("token").notNull(),
+diff --git a/src/lib/mysql.ts b/src/lib/mysql.ts
+index 87c645dad0e4825a4541e53c58ba70c2c0f69b6c..9a8cca79b6df192693d26b7370ae96578038b968 100644
+--- a/src/lib/mysql.ts
++++ b/src/lib/mysql.ts
+@@ -16,7 +16,7 @@ export function createTables(mySqlTable: MySqlTableFn) {
+     id: varchar("id", { length: 255 }).notNull().primaryKey(),
+     name: varchar("name", { length: 255 }),
+     email: varchar("email", { length: 255 }).notNull(),
+-    emailVerified: timestamp("emailVerified", {
++    emailVerified: timestamp("email_verified", {
+       mode: "date",
+       fsp: 3,
+     }).defaultNow(),
+@@ -26,23 +26,23 @@ export function createTables(mySqlTable: MySqlTableFn) {
+   const accounts = mySqlTable(
+     "account",
+     {
+-      userId: varchar("userId", { length: 255 })
++      userId: varchar("user_id", { length: 255 })
+         .notNull()
+         .references(() => users.id, { onDelete: "cascade" }),
+       type: varchar("type", { length: 255 })
+         .$type<AdapterAccount["type"]>()
+         .notNull(),
+       provider: varchar("provider", { length: 255 }).notNull(),
+-      providerAccountId: varchar("providerAccountId", {
++      providerAccountId: varchar("provider_account_id", {
+         length: 255,
+       }).notNull(),
+-      refresh_token: varchar("refresh_token", { length: 255 }),
+-      access_token: varchar("access_token", { length: 255 }),
+-      expires_at: int("expires_at"),
+-      token_type: varchar("token_type", { length: 255 }),
++      refreshToken: varchar("refresh_token", { length: 255 }),
++      accessToken: varchar("access_token", { length: 255 }),
++      expiresAt: int("expires_at"),
++      tokenType: varchar("token_type", { length: 255 }),
+       scope: varchar("scope", { length: 255 }),
+-      id_token: varchar("id_token", { length: 255 }),
+-      session_state: varchar("session_state", { length: 255 }),
++      idToken: varchar("id_token", { length: 255 }),
++      sessionState: varchar("session_state", { length: 255 }),
+     },
+     (account) => ({
+       compoundKey: primaryKey(account.provider, account.providerAccountId),
+@@ -50,17 +50,17 @@ export function createTables(mySqlTable: MySqlTableFn) {
+   )
+ 
+   const sessions = mySqlTable("session", {
+-    sessionToken: varchar("sessionToken", { length: 255 })
++    sessionToken: varchar("session_token", { length: 255 })
+       .notNull()
+       .primaryKey(),
+-    userId: varchar("userId", { length: 255 })
++    userId: varchar("user_id", { length: 255 })
+       .notNull()
+       .references(() => users.id, { onDelete: "cascade" }),
+     expires: timestamp("expires", { mode: "date" }).notNull(),
+   })
+ 
+   const verificationTokens = mySqlTable(
+-    "verificationToken",
++    "verification_token",
+     {
+       identifier: varchar("identifier", { length: 255 }).notNull(),
+       token: varchar("token", { length: 255 }).notNull(),
+diff --git a/src/lib/pg.ts b/src/lib/pg.ts
+index ec33d7cf9662e09713c1b719d6c75ec4630ec6b1..a30845409e6beb6793345aa32db317c977b4f692 100644
+--- a/src/lib/pg.ts
++++ b/src/lib/pg.ts
+@@ -16,26 +16,26 @@ export function createTables(pgTable: PgTableFn) {
+     id: text("id").notNull().primaryKey(),
+     name: text("name"),
+     email: text("email").notNull(),
+-    emailVerified: timestamp("emailVerified", { mode: "date" }),
++    emailVerified: timestamp("email_verified", { mode: "date" }),
+     image: text("image"),
+   })
+ 
+   const accounts = pgTable(
+     "account",
+     {
+-      userId: text("userId")
++      userId: text("user_id")
+         .notNull()
+         .references(() => users.id, { onDelete: "cascade" }),
+       type: text("type").$type<AdapterAccount["type"]>().notNull(),
+       provider: text("provider").notNull(),
+-      providerAccountId: text("providerAccountId").notNull(),
+-      refresh_token: text("refresh_token"),
+-      access_token: text("access_token"),
+-      expires_at: integer("expires_at"),
+-      token_type: text("token_type"),
++      providerAccountId: text("provider_account_id").notNull(),
++      refreshToken: text("refresh_token"),
++      accessToken: text("access_token"),
++      expiresAt: integer("expires_at"),
++      tokenType: text("token_type"),
+       scope: text("scope"),
+-      id_token: text("id_token"),
+-      session_state: text("session_state"),
++      idToken: text("id_token"),
++      sessionState: text("session_state"),
+     },
+     (account) => ({
+       compoundKey: primaryKey(account.provider, account.providerAccountId),
+@@ -43,15 +43,15 @@ export function createTables(pgTable: PgTableFn) {
+   )
+ 
+   const sessions = pgTable("session", {
+-    sessionToken: text("sessionToken").notNull().primaryKey(),
+-    userId: text("userId")
++    sessionToken: text("session_token").notNull().primaryKey(),
++    userId: text("user_id")
+       .notNull()
+       .references(() => users.id, { onDelete: "cascade" }),
+     expires: timestamp("expires", { mode: "date" }).notNull(),
+   })
+ 
+   const verificationTokens = pgTable(
+-    "verificationToken",
++    "verification_token",
+     {
+       identifier: text("identifier").notNull(),
+       token: text("token").notNull(),
+@@ -145,13 +145,13 @@ export function pgDrizzleAdapter(
+       // However, the return type is expecting `undefined`.
+       const account = {
+         ...updatedAccount,
+-        access_token: updatedAccount.access_token ?? undefined,
+-        token_type: updatedAccount.token_type ?? undefined,
+-        id_token: updatedAccount.id_token ?? undefined,
+-        refresh_token: updatedAccount.refresh_token ?? undefined,
++        accessToken: updatedAccount.access_token ?? undefined,
++        tokenType: updatedAccount.token_type ?? undefined,
++        idToken: updatedAccount.id_token ?? undefined,
++        refreshToken: updatedAccount.refresh_token ?? undefined,
+         scope: updatedAccount.scope ?? undefined,
+-        expires_at: updatedAccount.expires_at ?? undefined,
+-        session_state: updatedAccount.session_state ?? undefined,
++        expiresAt: updatedAccount.expires_at ?? undefined,
++        sessionState: updatedAccount.session_state ?? undefined,
+       }
+ 
+       return account
+diff --git a/src/lib/sqlite.ts b/src/lib/sqlite.ts
+index c9b4d2a4bc24300720117c7423348188cbb53193..6dd2ef60397e236ddfec37d3c7287618bab82bb2 100644
+--- a/src/lib/sqlite.ts
++++ b/src/lib/sqlite.ts
+@@ -15,26 +15,26 @@ export function createTables(sqliteTable: SQLiteTableFn) {
+     id: text("id").notNull().primaryKey(),
+     name: text("name"),
+     email: text("email").notNull(),
+-    emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
++    emailVerified: integer("email_verified", { mode: "timestamp_ms" }),
+     image: text("image"),
+   })
+ 
+   const accounts = sqliteTable(
+     "account",
+     {
+-      userId: text("userId")
++      userId: text("user_id")
+         .notNull()
+         .references(() => users.id, { onDelete: "cascade" }),
+       type: text("type").$type<AdapterAccount["type"]>().notNull(),
+       provider: text("provider").notNull(),
+-      providerAccountId: text("providerAccountId").notNull(),
+-      refresh_token: text("refresh_token"),
+-      access_token: text("access_token"),
+-      expires_at: integer("expires_at"),
+-      token_type: text("token_type"),
++      providerAccountId: text("provider_account_id").notNull(),
++      refreshToken: text("refresh_token"),
++      accessToken: text("access_token"),
++      expiresAt: integer("expires_at"),
++      tokenType: text("token_type"),
+       scope: text("scope"),
+-      id_token: text("id_token"),
+-      session_state: text("session_state"),
++      idToken: text("id_token"),
++      sessionState: text("session_state"),
+     },
+     (account) => ({
+       compoundKey: primaryKey(account.provider, account.providerAccountId),
+@@ -42,15 +42,15 @@ export function createTables(sqliteTable: SQLiteTableFn) {
+   )
+ 
+   const sessions = sqliteTable("session", {
+-    sessionToken: text("sessionToken").notNull().primaryKey(),
+-    userId: text("userId")
++    sessionToken: text("session_token").notNull().primaryKey(),
++    userId: text("user_id")
+       .notNull()
+       .references(() => users.id, { onDelete: "cascade" }),
+     expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+   })
+ 
+   const verificationTokens = sqliteTable(
+-    "verificationToken",
++    "verification_token",
+     {
+       identifier: text("identifier").notNull(),
+       token: text("token").notNull(),
+@@ -141,13 +141,13 @@ export function SQLiteDrizzleAdapter(
+       const account: AdapterAccount = {
+         ...updatedAccount,
+         type: updatedAccount.type,
+-        access_token: updatedAccount.access_token ?? undefined,
+-        token_type: updatedAccount.token_type ?? undefined,
+-        id_token: updatedAccount.id_token ?? undefined,
+-        refresh_token: updatedAccount.refresh_token ?? undefined,
++        accessToken: updatedAccount.access_token ?? undefined,
++        tokenType: updatedAccount.token_type ?? undefined,
++        idToken: updatedAccount.id_token ?? undefined,
++        refreshToken: updatedAccount.refresh_token ?? undefined,
+         scope: updatedAccount.scope ?? undefined,
+-        expires_at: updatedAccount.expires_at ?? undefined,
+-        session_state: updatedAccount.session_state ?? undefined,
++        expiresAt: updatedAccount.expires_at ?? undefined,
++        sessionState: updatedAccount.session_state ?? undefined,
+       }
+ 
+       return account

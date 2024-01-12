@@ -1,0 +1,29 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.4.1/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"files": {
+		"ignoreUnknown": true,
+		"ignore": [
+			"node_modules/**",
+			".next/**",
+			"recipes/**",
+			"db/migrations/**",
+			"build/**",
+			"dist",
+			"patches/**",
+			"pnpm-lock.yaml",
+			".contentlayer/**"
+		]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true
+		}
+	},
+	"formatter": {
+		"enabled": true
+	}
+}
