@@ -4,7 +4,7 @@ Opinionated baseline for building SaaS applications with zero friction.
 
 > [!NOTE]
 > This template is based on the incredible work of several authors:
-> * Authentication: [Antonio Erdeljac's next-auth huide](https://github.com/AntonioErdeljac/next-auth-v5-advanced-guide)
+> * Authentication: [Antonio Erdeljac's next-auth guide](https://github.com/AntonioErdeljac/next-auth-v5-advanced-guide)
 > * Design: [shadcn's Taxonomy](https://github.com/shadcn-ui/taxonomy)
 
 ## Features
