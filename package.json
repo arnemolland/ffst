@@ -6,7 +6,7 @@
   "scripts": {
     "migrate": "npx tsx ./db/migrate.ts",
     "dev": "concurrently \"contentlayer dev\" \"next dev\"",
-    "build": "concurrently \"contentlayer build\" \"next build\"",
+    "build": "contentlayer build && next build",
     "start": "next start",
     "format": "biome format . --write",
     "lint": "biome check . --apply && next lint",
