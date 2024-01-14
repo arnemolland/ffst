@@ -40,6 +40,7 @@ export const metadata: Metadata = {
 	openGraph: {
 		type: "website",
 		locale: "en_US",
+		images: siteConfig.ogImage,
 		url: siteConfig.url,
 		title: siteConfig.name,
 		siteName: siteConfig.name,
