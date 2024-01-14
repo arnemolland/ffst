@@ -51,6 +51,7 @@ export const metadata: Metadata = {
 		site: "@arnemolland",
 		title: siteConfig.name,
 		description: siteConfig.description,
+		images: siteConfig.ogImage,
 		card: "summary_large_image",
 	},
 	icons: {
