@@ -9,12 +9,10 @@ export const env = createEnv({
 		NEXTAUTH_SECRET: z.string().min(1),
 		DATABASE_URL: z.string().min(1),
 		RESEND_API_KEY: z.string().min(1),
-		STRIPE_API_KEY: z.string().min(1),
-		STRIPE_WEBHOOK_SECRET: z.string().min(1),
+		LEMONSQUEEZY_API_KEY: z.string().min(1),
+		LEMONSQUEEZY_WEBHOOK_SECRET: z.string().min(1),
+		LEMONSQUEEZY_STORE_ID: z.number(),
 		TINYBIRD_WORKSPACE_TOKEN: z.string().min(1),
-		STRIPE_TEAM_MONTHLY_PLAN_ID: z.string().min(1),
-		STRIPE_BUSINESS_MONTHLY_PLAN_ID: z.string().min(1),
-		STRIPE_ENTERPRISE_MONTHLY_PLAN_ID: z.string().min(1),
 	},
 	client: {
 		NEXT_PUBLIC_APP_URL: z.string().min(1),
@@ -24,14 +22,12 @@ export const env = createEnv({
 		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 		DATABASE_URL: process.env.DATABASE_URL,
 		RESEND_API_KEY: process.env.RESEND_API_KEY,
-		STRIPE_API_KEY: process.env.STRIPE_API_KEY,
-		STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+		LEMONSQUEEZY_API_KEY: process.env.LEMONSQUEEZY_API_KEY,
+		LEMONSQUEEZY_WEBHOOK_SECRET: process.env.LEMONSQUEEZY_WEBHOOK_SECRET,
+		LEMONSQUEEZY_STORE_ID: process.env.LEMONSQUEEZY_STORE_ID
+			? parseInt(process.env.LEMONSQUEEZY_STORE_ID)
+			: undefined,
 		TINYBIRD_WORKSPACE_TOKEN: process.env.TINYBIRD_WORKSPACE_TOKEN,
 		NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-		STRIPE_TEAM_MONTHLY_PLAN_ID: process.env.STRIPE_TEAM_MONTHLY_PLAN_ID,
-		STRIPE_BUSINESS_MONTHLY_PLAN_ID:
-			process.env.STRIPE_BUSINESS_MONTHLY_PLAN_ID,
-		STRIPE_ENTERPRISE_MONTHLY_PLAN_ID:
-			process.env.STRIPE_ENTERPRISE_MONTHLY_PLAN_ID,
 	},
 });

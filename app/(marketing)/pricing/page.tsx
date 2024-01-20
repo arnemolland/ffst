@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 	title: "Pricing",
 };
 
-// TODO: Make this page dynamic based on Stripe pricing
+// TODO: Make this page dynamic based on Lemon Squeezy pricing
 export default function PricingPage() {
 	return (
 		<main>

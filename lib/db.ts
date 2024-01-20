@@ -4,12 +4,13 @@ import { db } from "@/db";
 import {
 	accounts,
 	passwordResetTokens,
+	subscriptions,
 	twoFactorConfirmations,
 	twoFactorTokens,
 	users,
 	verificationTokens,
 } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export async function getAccountByUserId(userId: string) {
 	try {
@@ -127,6 +128,44 @@ export async function getVerificationTokenByEmail(email: string) {
 		});
 
 		return verificationToken;
+	} catch {
+		return null;
+	}
+}
+
+export async function getPlans() {
+	try {
+		const plans = await db.query.plans.findMany();
+
+		return plans;
+	} catch {
+		return null;
+	}
+}
+
+export async function getPlanById(id: string) {
+	try {
+		const plan = await db.query.plans.findFirst({
+			where: eq(users.id, id),
+		});
+
+		return plan;
+	} catch {
+		return null;
+	}
+}
+
+export async function getSubscriptionById(id: string) {
+	try {
+		const subscription = await db.query.subscriptions.findFirst({
+			where: eq(users.id, id),
+			with: {
+				plan: true,
+			},
+			orderBy: desc(subscriptions.lemonSqueezyId),
+		});
+
+		return subscription;
 	} catch {
 		return null;
 	}
