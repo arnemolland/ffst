@@ -4,8 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-
+import { z } from "zod";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { newPassword } from "@/lib/actions/new-password";
 import { newPasswordSchema } from "@/lib/schemas/auth";
 
-export const NewPasswordForm = () => {
+export function NewPasswordForm() {
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
 
@@ -79,4 +78,4 @@ export const NewPasswordForm = () => {
 			</form>
 		</Form>
 	);
-};
+}

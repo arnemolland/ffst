@@ -11,7 +11,7 @@ import {
 } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export const getAccountByUserId = async (userId: string) => {
+export async function getAccountByUserId(userId: string) {
 	try {
 		const account = await db.query.accounts.findFirst({
 			where: eq(accounts.userId, userId),
@@ -21,9 +21,9 @@ export const getAccountByUserId = async (userId: string) => {
 	} catch {
 		return null;
 	}
-};
+}
 
-export const getPasswordResetTokenByToken = async (token: string) => {
+export async function getPasswordResetTokenByToken(token: string) {
 	try {
 		const passwordResetToken = await db.query.passwordResetTokens.findFirst({
 			where: eq(passwordResetTokens.token, token),
@@ -33,9 +33,9 @@ export const getPasswordResetTokenByToken = async (token: string) => {
 	} catch {
 		return null;
 	}
-};
+}
 
-export const getPasswordResetTokenByEmail = async (email: string) => {
+export async function getPasswordResetTokenByEmail(email: string) {
 	try {
 		const passwordResetToken = await db.query.passwordResetTokens.findFirst({
 			where: eq(passwordResetTokens.email, email),
@@ -45,9 +45,9 @@ export const getPasswordResetTokenByEmail = async (email: string) => {
 	} catch {
 		return null;
 	}
-};
+}
 
-export const getTwoFactorConfirmationByUserId = async (userId: string) => {
+export async function getTwoFactorConfirmationByUserId(userId: string) {
 	try {
 		const twoFactorConfirmation =
 			await db.query.twoFactorConfirmations.findFirst({
@@ -58,9 +58,9 @@ export const getTwoFactorConfirmationByUserId = async (userId: string) => {
 	} catch {
 		return null;
 	}
-};
+}
 
-export const getTwoFactorTokenByToken = async (token: string) => {
+export async function getTwoFactorTokenByToken(token: string) {
 	try {
 		const twoFactorToken = await db.query.twoFactorTokens.findFirst({
 			where: eq(twoFactorTokens.token, token),
@@ -70,9 +70,9 @@ export const getTwoFactorTokenByToken = async (token: string) => {
 	} catch {
 		return null;
 	}
-};
+}
 
-export const getTwoFactorTokenByEmail = async (email: string) => {
+export async function getTwoFactorTokenByEmail(email: string) {
 	try {
 		const twoFactorToken = await db.query.twoFactorTokens.findFirst({
 			where: eq(twoFactorTokens.email, email),
@@ -82,9 +82,9 @@ export const getTwoFactorTokenByEmail = async (email: string) => {
 	} catch {
 		return null;
 	}
-};
+}
 
-export const getUserByEmail = async (email: string) => {
+export async function getUserByEmail(email: string) {
 	try {
 		const user = await db.query.users.findFirst({
 			where: eq(users.email, email),
@@ -94,9 +94,9 @@ export const getUserByEmail = async (email: string) => {
 	} catch {
 		return null;
 	}
-};
+}
 
-export const getUserById = async (id: string) => {
+export async function getUserById(id: string) {
 	try {
 		const user = await db.query.users.findFirst({
 			where: eq(users.id, id),
@@ -106,9 +106,9 @@ export const getUserById = async (id: string) => {
 	} catch {
 		return null;
 	}
-};
+}
 
-export const getVerificationTokenByToken = async (token: string) => {
+export async function getVerificationTokenByToken(token: string) {
 	try {
 		const verificationToken = await db.query.verificationTokens.findFirst({
 			where: eq(verificationTokens.token, token),
@@ -118,9 +118,9 @@ export const getVerificationTokenByToken = async (token: string) => {
 	} catch {
 		return null;
 	}
-};
+}
 
-export const getVerificationTokenByEmail = async (email: string) => {
+export async function getVerificationTokenByEmail(email: string) {
 	try {
 		const verificationToken = await db.query.verificationTokens.findFirst({
 			where: eq(verificationTokens.email, email),
@@ -130,4 +130,4 @@ export const getVerificationTokenByEmail = async (email: string) => {
 	} catch {
 		return null;
 	}
-};
+}

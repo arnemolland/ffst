@@ -1,6 +1,6 @@
 "use server";
 
-import * as z from "zod";
+import { z } from "zod";
 
 import { getUserByEmail } from "@/lib/db";
 import { sendPasswordResetEmail } from "@/lib/mail";

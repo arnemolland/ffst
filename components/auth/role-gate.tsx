@@ -1,7 +1,6 @@
 "use client";
 
 import { UserRole } from "@/lib/schemas/auth";
-
 import { FormError } from "@/components/form-error";
 import { useCurrentRole } from "@/hooks/use-current-role";
 
@@ -10,7 +9,7 @@ interface RoleGateProps {
 	allowedRole: UserRole;
 }
 
-export const RoleGate = ({ children, allowedRole }: RoleGateProps) => {
+export function RoleGate({ children, allowedRole }: RoleGateProps) {
 	const role = useCurrentRole();
 
 	if (role !== allowedRole) {
@@ -20,4 +19,4 @@ export const RoleGate = ({ children, allowedRole }: RoleGateProps) => {
 	}
 
 	return <>{children}</>;
-};
+}

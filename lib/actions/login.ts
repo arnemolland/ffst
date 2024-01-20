@@ -1,7 +1,7 @@
 "use server";
 
 import { AuthError } from "next-auth";
-import * as z from "zod";
+import { z } from "zod";
 
 import { signIn } from "@/auth";
 import { db } from "@/db";

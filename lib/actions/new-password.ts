@@ -6,7 +6,7 @@ import { getPasswordResetTokenByToken, getUserByEmail } from "@/lib/db";
 import { newPasswordSchema } from "@/lib/schemas/auth";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
-import * as z from "zod";
+import { z } from "zod";
 import { ErrorCode } from "./errors";
 
 export const newPassword = async (

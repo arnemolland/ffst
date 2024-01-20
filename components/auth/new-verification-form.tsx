@@ -1,23 +1,22 @@
 "use client";
 
+import React from "react";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { Icons } from "@/components/icons";
 import { newVerification } from "@/lib/actions/new-verification";
 import { toast } from "sonner";
 
-export const NewVerificationForm = () => {
-	const [error, setError] = useState<string | undefined>();
-	const [success, setSuccess] = useState<string | undefined>();
+export function NewVerificationForm() {
+	const [error, setError] = React.useState<string | undefined>();
+	const [success, setSuccess] = React.useState<string | undefined>();
 
 	const searchParams = useSearchParams();
 
 	const token = searchParams.get("token");
 
-	const onSubmit = useCallback(() => {
+	const onSubmit = React.useCallback(() => {
 		if (success || error) return;
 
 		if (!token) {
@@ -38,7 +37,7 @@ export const NewVerificationForm = () => {
 			});
 	}, [token, success, error]);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		onSubmit();
 	}, [onSubmit]);
 
@@ -51,4 +50,4 @@ export const NewVerificationForm = () => {
 			{!success && <FormError message={error} />}
 		</div>
 	);
-};
+}

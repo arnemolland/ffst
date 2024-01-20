@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import * as z from "zod";
+import { z } from "zod";
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";

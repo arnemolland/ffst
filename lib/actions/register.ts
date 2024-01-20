@@ -7,7 +7,7 @@ import { sendVerificationEmail } from "@/lib/mail";
 import { authSchema } from "@/lib/schemas/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import bcrypt from "bcryptjs";
-import * as z from "zod";
+import { z } from "zod";
 import { ErrorCode } from "./errors";
 
 export const register = async (values: z.infer<typeof authSchema>) => {
