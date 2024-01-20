@@ -21,7 +21,7 @@ Opinionated baseline for building SaaS applications with zero friction.
 * ORM and DB tools using [**Drizzle**](https://drizzle.team)
 * Database using [**PostgreSQL**](https://www.postgresql.org)
 * UI components built with [**shadcn/ui**](https://ui.shadcn.com)
-* Payments using [**Stripe**](https://stripe.com)
+* Payments using [**Stripe**](https://stripe.com) -- to be swapped out with Paddle or Lemon Squeezy
 * Analytics using [**Tinybird**](https://tinybird.co)
 * Styled using [**Tailwind CSS**](https://tailwindcss.com)
 * Validations using [**Zod**](https://zod.dev)
@@ -49,7 +49,7 @@ bun dev
 
 ## Roadmap
 
-- [ ] Dynamic pricing from Stripe's Price API
+- [ ] Dynamic pricing
 - [ ] Payment flow
 - [ ] Turborepo(?)
 - [ ] Org/team/enterprise support
