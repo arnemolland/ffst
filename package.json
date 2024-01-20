@@ -107,7 +107,7 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@auth/drizzle-adapter@0.3.14": "patches/@auth__drizzle-adapter@0.3.14.patch",
+      "@auth/drizzle-adapter@0.3.16": "patches/@auth__drizzle-adapter@0.3.16.patch",
       "next-contentlayer@0.3.4": "patches/next-contentlayer@0.3.4.patch"
     },
     "overrides": {
