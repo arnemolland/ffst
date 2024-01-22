@@ -272,7 +272,7 @@ export type Plan = z.infer<typeof planSelectSchema>;
 export const subscriptions = pgTable(
 	"subscription",
 	{
-		id: uuid("id").defaultRandom().notNull().primaryKey(),
+		id: uuid("id").defaultRandom().notNull(),
 		lemonSqueezyId: integer("lemon_squeezy_id").unique().notNull(),
 		orderId: uuid("order_id").notNull().unique(),
 		name: text("name").notNull(),
