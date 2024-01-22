@@ -1,24 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import Plans from "@/components/plan";
+import React from "react";
 import {
-	UpdateBillingLink,
 	CancelLink,
-	ResumeButton,
 	PauseLink,
+	ResumeButton,
 	UnpauseButton,
+	UpdateBillingLink,
 } from "@/components/manage";
+import Plans from "@/components/plan";
+import Link from "next/link";
 
 // Main component
 export const SubscriptionComponent = ({ sub, plans }) => {
 	// Make sure Lemon.js is loaded
-	useEffect(() => {
+	React.useEffect(() => {
 		window.createLemonSqueezy();
 	}, []);
 
-	const [subscription, setSubscription] = useState(() => {
+	const [subscription, setSubscription] = React.useState(() => {
 		if (sub) {
 			return {
 				id: sub.lemonSqueezyId,

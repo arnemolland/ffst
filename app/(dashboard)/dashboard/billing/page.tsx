@@ -1,13 +1,13 @@
 import React from "react";
 
-import Script from "next/script";
-import { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/lib/auth";
-import { getPlans, getSubscriptionById } from "@/lib/db";
-import { SubscriptionComponent } from "@/components/subscription";
 import { DashboardHeader } from "@/components/header";
 import { DashboardShell } from "@/components/shell";
+import { SubscriptionComponent } from "@/components/subscription";
+import { getCurrentUser } from "@/lib/auth";
+import { getPlans, getSubscriptionById } from "@/lib/db";
+import { Metadata } from "next";
+import { redirect } from "next/navigation";
+import Script from "next/script";
 
 export const metadata: Metadata = {
 	title: "Billing",

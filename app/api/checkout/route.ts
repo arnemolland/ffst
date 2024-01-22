@@ -1,7 +1,7 @@
-import LemonSqueezy from "@lemonsqueezy/lemonsqueezy.js";
-import { NextRequest, NextResponse } from "next/server";
 import { env } from "@/env";
 import { getCurrentUser } from "@/lib/auth";
+import LemonSqueezy from "@lemonsqueezy/lemonsqueezy.js";
+import { NextRequest, NextResponse } from "next/server";
 
 const ls = new LemonSqueezy(env.LEMONSQUEEZY_API_KEY);
 

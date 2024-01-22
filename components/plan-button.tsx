@@ -2,10 +2,10 @@
 
 import React from "react";
 
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function PlanButton({ plan, subscription, setSubscription }) {
 	const [isMutating, setIsMutating] = React.useState(false);

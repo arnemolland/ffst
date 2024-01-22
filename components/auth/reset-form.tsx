@@ -1,9 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import React from "react";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { Button } from "@/components/ui/button";
@@ -18,11 +15,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { reset } from "@/lib/actions/reset";
 import { resetSchema } from "@/lib/schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export function ResetForm() {
-	const [error, setError] = useState<string | undefined>("");
-	const [success, setSuccess] = useState<string | undefined>("");
-	const [isPending, startTransition] = useTransition();
+	const [error, setError] = React.useState<string | undefined>("");
+	const [success, setSuccess] = React.useState<string | undefined>("");
+	const [isPending, startTransition] = React.useTransition();
 
 	const form = useForm<z.infer<typeof resetSchema>>({
 		resolver: zodResolver(resetSchema),

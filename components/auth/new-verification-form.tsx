@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { useSearchParams } from "next/navigation";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { Icons } from "@/components/icons";
 import { newVerification } from "@/lib/actions/new-verification";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 export function NewVerificationForm() {

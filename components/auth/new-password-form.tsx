@@ -1,10 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import React from "react";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { Button } from "@/components/ui/button";
@@ -19,14 +15,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { newPassword } from "@/lib/actions/new-password";
 import { newPasswordSchema } from "@/lib/schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export function NewPasswordForm() {
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
 
-	const [error, setError] = useState<string | undefined>("");
-	const [success, setSuccess] = useState<string | undefined>("");
-	const [isPending, startTransition] = useTransition();
+	const [error, setError] = React.useState<string | undefined>("");
+	const [success, setSuccess] = React.useState<string | undefined>("");
+	const [isPending, startTransition] = React.useTransition();
 
 	const form = useForm<z.infer<typeof newPasswordSchema>>({
 		resolver: zodResolver(newPasswordSchema),

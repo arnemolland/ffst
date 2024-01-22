@@ -1,11 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getPlanById } from "@/lib/db";
-import LemonSqueezy from "@lemonsqueezy/lemonsqueezy.js/dist/index";
 import { env } from "@/env";
+import { getPlanById } from "@/lib/db";
+import LemonSqueezy from "@lemonsqueezy/lemonsqueezy.js";
+import { NextRequest, NextResponse } from "next/server";
 
 const ls = new LemonSqueezy(env.LEMONSQUEEZY_API_KEY);
 
-export async function GET(request: NextRequest, { params }) {
+type Args = {
+	params: {
+		id: number;
+	};
+};
+
+export async function GET(_: NextRequest, { params }: Args) {
 	/**
 	 * Used by some buttons to get subscription update billing and customer portal URLs
 	 */
@@ -31,7 +37,7 @@ export async function GET(request: NextRequest, { params }) {
 	}
 }
 
-export async function POST(request, { params }) {
+export async function POST(request: NextRequest, { params }: Args) {
 	const res = await request.json();
 
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>

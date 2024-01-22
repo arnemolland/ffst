@@ -1,15 +1,15 @@
 "use client";
 
-import Plans from "@/components/plan";
+import React from "react";
 
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import Plans from "@/components/plan";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function UpdateBillingLink({ subscription, elementType }) {
-	const [isMutating, setIsMutating] = useState(false);
+	const [isMutating, setIsMutating] = React.useState(false);
 	const router = useRouter();
 
 	async function openUpdateModal(e) {
@@ -65,7 +65,7 @@ export function UpdateBillingLink({ subscription, elementType }) {
 }
 
 export function CancelLink({ subscription, setSubscription }) {
-	const [isMutating, setIsMutating] = useState(false);
+	const [isMutating, setIsMutating] = React.useState(false);
 
 	async function handleCancel(e) {
 		e.preventDefault();
@@ -115,7 +115,7 @@ export function CancelLink({ subscription, setSubscription }) {
 }
 
 export function ResumeButton({ subscription, setSubscription }) {
-	const [isMutating, setIsMutating] = useState(false);
+	const [isMutating, setIsMutating] = React.useState(false);
 
 	const resumeSubscription = async (e) => {
 		e.preventDefault();
@@ -168,7 +168,7 @@ export function ResumeButton({ subscription, setSubscription }) {
 }
 
 export function PauseLink({ subscription, setSubscription }) {
-	const [isMutating, setIsMutating] = useState(false);
+	const [isMutating, setIsMutating] = React.useState(false);
 
 	async function handlePause(e) {
 		e.preventDefault();
@@ -218,7 +218,7 @@ export function PauseLink({ subscription, setSubscription }) {
 }
 
 export function UnpauseButton({ subscription, setSubscription }) {
-	const [isMutating, setIsMutating] = useState(false);
+	const [isMutating, setIsMutating] = React.useState(false);
 
 	const unpauseSubscription = async (e) => {
 		e.preventDefault();
@@ -271,7 +271,7 @@ export function UnpauseButton({ subscription, setSubscription }) {
 }
 
 export function PlansComponent({ plans, sub }) {
-	const [subscription, setSubscription] = useState(() => {
+	const [subscription, setSubscription] = React.useState(() => {
 		if (sub) {
 			return {
 				id: sub.lemonSqueezyId,

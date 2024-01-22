@@ -1,6 +1,6 @@
+import { db } from "@/db";
 import { Plan, Subscription, subscriptions } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { db } from "@/db";
 
 export async function getSubscriptionWithPlan(subsriptionId: string): Promise<
 	| (Subscription & {
