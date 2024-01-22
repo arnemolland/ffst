@@ -3,6 +3,7 @@ import { relations } from "drizzle-orm";
 import {
 	boolean,
 	integer,
+	json,
 	pgTable,
 	primaryKey,
 	text,
@@ -154,7 +155,7 @@ export const teams = pgTable("team", {
 export const teamsRelations = relations(teams, ({ many, one }) => ({
 	projects: many(projects),
 	members: many(teamMembers),
-	billingAccount: one(billingAccounts),
+	billingAccount: one(subscriptions),
 }));
 
 const teamSelectSchema = createSelectSchema(teams);
@@ -244,40 +245,114 @@ export const projectMembersRelations = relations(projectMembers, ({ one }) => ({
 const projectMemberSelectSchema = createSelectSchema(projectMembers);
 export type ProjectMember = z.infer<typeof projectMemberSelectSchema>;
 
-export const billingAccounts = pgTable(
-	"billing_account",
+export const plans = pgTable("plan", {
+	id: uuid("id").defaultRandom().notNull().primaryKey(),
+	productId: uuid("product_id").notNull(),
+	variantId: uuid("variant_id").notNull(),
+	name: text("name"),
+	description: text("description"),
+	variantName: text("variant_name").notNull(),
+	sort: integer("sort").notNull().default(0),
+	status: text("status").notNull().default("inactive"),
+	price: integer("price").notNull(),
+	interval: text("interval").notNull(),
+	intervalCount: integer("interval_count").notNull().default(1),
+});
+
+export const plansRelations = relations(plans, ({ one }) => ({
+	subscriptions: one(subscriptions, {
+		fields: [plans.id],
+		references: [subscriptions.planId],
+	}),
+}));
+
+const planSelectSchema = createSelectSchema(plans);
+export type Plan = z.infer<typeof planSelectSchema>;
+
+export const subscriptions = pgTable(
+	"subscription",
 	{
-		id: uuid("id").notNull().defaultRandom(),
-		billingMethod: text("billing_method").notNull(),
-		accountStatus: text("account_status").notNull(),
-		currentBalance: integer("current_balance").notNull(),
-		createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
-		updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
-		stripeCustomerId: text("stripe_customer_id").unique(),
-		stripeSubscriptionId: text("stripe_subscription_id").unique(),
-		stripePriceId: text("stripe_price_id"),
-		stripeCurrentPeriodEnd: timestamp("stripe_current_period_end", {
-			mode: "date",
-		}),
+		id: uuid("id").defaultRandom().notNull().primaryKey(),
+		lemonSqueezyId: integer("lemon_squeezy_id").unique().notNull(),
+		orderId: uuid("order_id").notNull().unique(),
+		name: text("name").notNull(),
+		email: text("email").notNull(),
+		status: text("status").notNull(),
+		renewsAt: timestamp("renews_at", { mode: "date" }),
+		endsAt: timestamp("ends_at", { mode: "date" }),
+		trialEndsAt: timestamp("trial_ends_at", { mode: "date" }),
+		resumesAt: timestamp("resumes_at", { mode: "date" }),
+		price: integer("price").notNull(),
+		planId: uuid("plan_id")
+			.notNull()
+			.references(() => plans.id),
 		teamId: uuid("team_id")
-			.unique()
 			.notNull()
 			.references(() => teams.id),
+		isUsageBased: boolean("is_usage_based").notNull().default(false),
+		subscriptionItemId: uuid("subscription_item_id"),
 	},
-	(ba) => ({
-		compoundKey: primaryKey({ columns: [ba.teamId, ba.id] }),
+	(s) => ({
+		compoundKey: primaryKey({ columns: [s.planId, s.teamId] }),
 	}),
 );
 
-export const billingAccountsRelations = relations(
-	billingAccounts,
-	({ one }) => ({
-		team: one(teams, {
-			fields: [billingAccounts.teamId],
-			references: [teams.id],
-		}),
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+	team: one(teams, {
+		fields: [subscriptions.teamId],
+		references: [teams.id],
 	}),
+	plan: one(plans, {
+		fields: [subscriptions.planId],
+		references: [plans.id],
+	}),
+}));
+
+const subscriptionSelectSchema = createSelectSchema(subscriptions);
+export type Subscription = z.infer<typeof subscriptionSelectSchema>;
+
+export const lemonSqueeryWebhookEvents = pgTable(
+	"lemon_squeezy_webhook_event",
+	{
+		id: uuid("id").notNull().defaultRandom().primaryKey(),
+		createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+		eventName: text("event_name").notNull(),
+		processed: boolean("processed").notNull().default(false),
+		body: json("body")
+			.$type<{
+				data: {
+					id: string;
+					type: string;
+					attributes: {
+						status: string;
+						renews_at: string;
+						ends_at: string;
+						trial_ends_at: string;
+						resumes_at: string;
+						order_id: string;
+						user_name: string;
+						user_email: string;
+						first_subscription_item: {
+							id: string;
+							price_id: string;
+							is_usage_based: boolean;
+						};
+					};
+				};
+				meta: {
+					custom_data: {
+						team_id: string;
+					};
+				};
+			}>()
+			.notNull(),
+		processingError: text("processing_error"),
+	},
 );
 
-const billingAccountSelectSchema = createSelectSchema(billingAccounts);
-export type BillingAccount = z.infer<typeof billingAccountSelectSchema>;
+const lemonSqueezyWebhookEventSelectSchema = createSelectSchema(
+	lemonSqueeryWebhookEvents,
+);
+export type LemonSqueezyWebhookEvent = z.infer<
+	typeof lemonSqueezyWebhookEventSelectSchema
+>;
