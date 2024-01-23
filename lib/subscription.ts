@@ -23,3 +23,25 @@ export async function getSubscriptionWithPlan(subsriptionId: string): Promise<
 		...subscription,
 	};
 }
+
+export async function getSubscriptionWithPlanByTeamId(teamId: string): Promise<
+	| (Subscription & {
+			plan: Plan;
+	  })
+	| null
+> {
+	const subscription = await db.query.subscriptions.findFirst({
+		where: eq(subscriptions.teamId, teamId),
+		with: {
+			plan: true,
+		},
+	});
+
+	if (!subscription) {
+		return null;
+	}
+
+	return {
+		...subscription,
+	};
+}

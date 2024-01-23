@@ -1,22 +1,32 @@
 "use client";
 
-import PlanButton from "@/components/plan-button";
+import { PlanButton } from "@/components/plan-button";
 import { cn } from "@/lib/utils";
 import React from "react";
 
-function createMarkup(html) {
+type Interval = "month" | "year";
+
+function createMarkup(html: string) {
 	return { __html: html };
 }
 
-function formatPrice(price) {
+function formatPrice(price: number) {
 	return price / 100;
 }
 
-function formatInterval(interval, intervalCount) {
+function formatInterval(interval: Interval, intervalCount: number) {
 	return intervalCount > 1 ? `${intervalCount} ${interval}s` : interval;
 }
 
-function IntervalSwitcher({ intervalValue, changeInterval }) {
+interface IntervalSwitcherProps {
+	intervalValue: string;
+	changeInterval: (interval: Interval) => void;
+}
+
+function IntervalSwitcher({
+	intervalValue,
+	changeInterval,
+}: IntervalSwitcherProps) {
 	return (
 		<div className="mt-6 flex justify-center items-center gap-4 text-sm text-gray-500">
 			<div data-plan-toggle="month">Monthly</div>
@@ -37,7 +47,34 @@ function IntervalSwitcher({ intervalValue, changeInterval }) {
 	);
 }
 
-function Plan({ plan, subscription, intervalValue, setSubscription }) {
+interface PlanProps {
+	plan: {
+		variantName: string;
+		description: string;
+		price: number;
+		interval: "month" | "year";
+		intervalCount: number;
+		variantId: string;
+	};
+	subscription?: {
+		status: string;
+		variantId: string;
+	} | null;
+	intervalValue: Interval;
+	setSubscription: React.Dispatch<
+		React.SetStateAction<{
+			status: string;
+			variantId: string;
+		} | null>
+	>;
+}
+
+function Plan({
+	plan,
+	subscription,
+	intervalValue,
+	setSubscription,
+}: PlanProps) {
 	return (
 		<div
 			className={cn(
@@ -79,8 +116,29 @@ declare global {
 	}
 }
 
-export default function Plans({ plans, subscription, setSubscription }) {
-	const [intervalValue, setIntervalValue] = React.useState("month");
+interface PlansProps {
+	plans: {
+		variantName: string;
+		description: string;
+		price: number;
+		interval: Interval;
+		intervalCount: number;
+		variantId: string;
+	}[];
+	subscription?: {
+		status: string;
+		variantId: string;
+	} | null;
+	setSubscription: React.Dispatch<
+		React.SetStateAction<{
+			status?: string;
+			variantId?: string;
+		} | null>
+	>;
+}
+
+export function Plans({ plans, subscription, setSubscription }: PlansProps) {
+	const [intervalValue, setIntervalValue] = React.useState<Interval>("month");
 
 	// Make sure Lemon.js is loaded
 	React.useEffect(() => {
@@ -95,7 +153,7 @@ export default function Plans({ plans, subscription, setSubscription }) {
 			/>
 
 			<div className="mt-5 grid gap-6 sm:grid-cols-2">
-				{plans.map((plan) => (
+				{plans?.map((plan) => (
 					<Plan
 						plan={plan}
 						subscription={subscription}

@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export default function PlanButton({ plan, subscription, setSubscription }) {
+export function PlanButton({ plan, subscription, setSubscription }) {
 	const [isMutating, setIsMutating] = React.useState(false);
 	const router = useRouter();
 

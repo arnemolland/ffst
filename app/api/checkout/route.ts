@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const ls = new LemonSqueezy(env.LEMONSQUEEZY_API_KEY);
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
 	const user = await getCurrentUser();
 
 	if (!user) {
@@ -15,9 +15,9 @@ export async function POST(request: NextRequest) {
 		);
 	}
 
-	const res = await request.json();
+	const body = await req.json();
 
-	if (!res.variantId) {
+	if (!body.variantId) {
 		return NextResponse.json(
 			{ error: true, message: "No variant ID was provided." },
 			{ status: 400 },
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 			},
 		},
 		product_options: {
-			enabled_variants: [res.variantId], // Only show the selected variant in the checkout
+			enabled_variants: [body.variantId], // Only show the selected variant in the checkout
 			redirect_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing/`,
 			receipt_link_url: `${process.env.NEXT_PUBLIC_APP_URL}/billing/`,
 			receipt_button_text: "Go to your account",
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 	try {
 		const checkout = await ls.createCheckout({
 			storeId: env.LEMONSQUEEZY_STORE_ID,
-			variantId: res.variantId,
+			variantId: body.variantId,
 			attributes,
 		});
 

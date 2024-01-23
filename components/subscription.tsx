@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
 	CancelLink,
 	PauseLink,
@@ -8,8 +7,9 @@ import {
 	UnpauseButton,
 	UpdateBillingLink,
 } from "@/components/manage";
-import Plans from "@/components/plan";
+import { Plans } from "@/components/plan";
 import Link from "next/link";
+import React from "react";
 
 // Main component
 export const SubscriptionComponent = ({ sub, plans }) => {

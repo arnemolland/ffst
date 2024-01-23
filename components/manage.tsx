@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import Plans from "@/components/plan";
+import { Plans } from "@/components/plan";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -285,7 +285,7 @@ export function PlansComponent({ plans, sub }) {
 				expiryDate: sub.endsAt,
 			};
 		}
-		return {};
+		return null;
 	});
 
 	return (
